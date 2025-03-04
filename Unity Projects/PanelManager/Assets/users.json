@@ -1,0 +1,123 @@
+{
+    "allUsers": [
+        {
+            "Name": "Anna",
+            "MaxBrightness": 78.0,
+            "MinBrightness": 12.0,
+            "MaxVolume": 45.0,
+            "MinVolume": 5.0
+        },
+        {
+            "Name": "Ava",
+            "MaxBrightness": 92.0,
+            "MinBrightness": 15.0,
+            "MaxVolume": 75.0,
+            "MinVolume": 25.0
+        },
+        {
+            "Name": "Chris",
+            "MaxBrightness": 85.0,
+            "MinBrightness": 15.0,
+            "MaxVolume": 70.0,
+            "MinVolume": 25.0
+        },
+        {
+            "Name": "Daniel",
+            "MaxBrightness": 85.0,
+            "MinBrightness": 10.0,
+            "MaxVolume": 90.0,
+            "MinVolume": 5.0
+        },
+        {
+            "Name": "Emma",
+            "MaxBrightness": 70.0,
+            "MinBrightness": 10.0,
+            "MaxVolume": 65.0,
+            "MinVolume": 5.0
+        },
+        {
+            "Name": "Ethan",
+            "MaxBrightness": 84.0,
+            "MinBrightness": 22.0,
+            "MaxVolume": 60.0,
+            "MinVolume": 20.0
+        },
+        {
+            "Name": "Isabella",
+            "MaxBrightness": 65.0,
+            "MinBrightness": 8.0,
+            "MaxVolume": 50.0,
+            "MinVolume": 10.0
+        },
+        {
+            "Name": "James",
+            "MaxBrightness": 77.0,
+            "MinBrightness": 10.0,
+            "MaxVolume": 85.0,
+            "MinVolume": 0.0
+        },
+        {
+            "Name": "Jessica",
+            "MaxBrightness": 70.0,
+            "MinBrightness": 20.0,
+            "MaxVolume": 60.0,
+            "MinVolume": 10.0
+        },
+        {
+            "Name": "John",
+            "MaxBrightness": 100.0,
+            "MinBrightness": 25.0,
+            "MaxVolume": 80.0,
+            "MinVolume": 20.0
+        },
+        {
+            "Name": "Josh",
+            "MaxBrightness": 65.0,
+            "MinBrightness": 5.0,
+            "MaxVolume": 100.0,
+            "MinVolume": 0.0
+        },
+        {
+            "Name": "Liam",
+            "MaxBrightness": 100.0,
+            "MinBrightness": 20.0,
+            "MaxVolume": 50.0,
+            "MinVolume": 15.0
+        },
+        {
+            "Name": "Lucas",
+            "MaxBrightness": 80.0,
+            "MinBrightness": 20.0,
+            "MaxVolume": 55.0,
+            "MinVolume": 5.0
+        },
+        {
+            "Name": "Mia",
+            "MaxBrightness": 88.0,
+            "MinBrightness": 18.0,
+            "MaxVolume": 40.0,
+            "MinVolume": 10.0
+        },
+        {
+            "Name": "Oliver",
+            "MaxBrightness": 90.0,
+            "MinBrightness": 20.0,
+            "MaxVolume": 95.0,
+            "MinVolume": 30.0
+        },
+        {
+            "Name": "Sarah",
+            "MaxBrightness": 90.0,
+            "MinBrightness": 15.0,
+            "MaxVolume": 65.0,
+            "MinVolume": 20.0
+        },
+        {
+            "Name": "Sophia",
+            "MaxBrightness": 95.0,
+            "MinBrightness": 15.0,
+            "MaxVolume": 30.0,
+            "MinVolume": 15.0
+        }
+    ]
+}
