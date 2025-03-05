@@ -7,9 +7,9 @@ using Unity.VisualScripting;
 public class AppManager : MonoBehaviour {
     public static AppManager Instance { get; private set; }
     [SerializeField] float timeoutDelay;
-    [SerializeField] GameObject connectionScreen, MainScreen, userSetting, adjustingUsers, addUser;
+    [SerializeField] GameObject connectionScreen, MainScreen, userSetting, adjustingUsers, addUser, arduinoNameScreen;
     [SerializeField] TMP_Text conText, userSettingHeader;
-    [SerializeField] TMP_InputField maxBright, minBright, maxVol, minVol, newUser;
+    [SerializeField] TMP_InputField maxBright, minBright, maxVol, minVol, newUser, arduinoName;
     [SerializeField] Transform content;
     [SerializeField] Color normalColor = Color.white;
     [SerializeField] Color highlightColor = new(0x00 / 255f, 0xFF / 255f, 0x67 / 255f);
@@ -24,12 +24,6 @@ public class AppManager : MonoBehaviour {
         else
             Instance = this;
     }
-
-    void Start() {
-        BluetoothManager.Instance.EstablishConnection();
-        StartCoroutine(WaitForConnection());
-    }
-
     IEnumerator WaitForConnection() {
         int dotCount = 0;
         string baseText = conText.text.Split('\n')[0];
@@ -47,6 +41,13 @@ public class AppManager : MonoBehaviour {
             connectionScreen.SetActive(false);
             MainScreen.SetActive(true);
         }
+    }
+
+    public void ArduioNameButton() {
+        BluetoothManager.Instance.EstablishConnection(arduinoName.text);
+        arduinoNameScreen.SetActive(false);
+        connectionScreen.SetActive(true);
+        StartCoroutine(WaitForConnection());
     }
 
     public void UserSettingsButton() {
@@ -127,7 +128,8 @@ public class AppManager : MonoBehaviour {
     public void MaxBrightnessChanged(string val) {
         if (float.TryParse(val, out float newVal) && newVal <= 100 && newVal > curUser.MinBrightness) {
             curUser.MaxBrightness = newVal;
-            UserManager.Instance.SaveUser(curUser);   
+            UserManager.Instance.SaveUser(curUser);
+            BluetoothManager.Instance.SetUserVariable(SettingTypes.MaxBright, newVal);
         }
         else
             maxBright.text = curUser.MaxBrightness.ToString();
@@ -137,6 +139,7 @@ public class AppManager : MonoBehaviour {
         if (float.TryParse(val, out float newVal) && newVal >= 0 && newVal < curUser.MaxBrightness) {
             curUser.MinBrightness = newVal;
             UserManager.Instance.SaveUser(curUser);
+            BluetoothManager.Instance.SetUserVariable(SettingTypes.MinBright, newVal);
         }
         else
             minBright.text = curUser.MinBrightness.ToString();
@@ -146,6 +149,7 @@ public class AppManager : MonoBehaviour {
         if (float.TryParse(val, out float newVal) && newVal <= 100 && newVal > curUser.MinVolume) {
             curUser.MaxVolume = newVal;
             UserManager.Instance.SaveUser(curUser);
+            BluetoothManager.Instance.SetUserVariable(SettingTypes.MaxVol, newVal);
         }
         else
             maxVol.text = curUser.MaxVolume.ToString();
@@ -155,6 +159,7 @@ public class AppManager : MonoBehaviour {
         if (float.TryParse(val, out float newVal) && newVal >= 0 && newVal < curUser.MaxVolume) {
             curUser.MinVolume = newVal;
             UserManager.Instance.SaveUser(curUser);
+            BluetoothManager.Instance.SetUserVariable(SettingTypes.MinVol, newVal);
         }
         else
             minVol.text = curUser.MinVolume.ToString();

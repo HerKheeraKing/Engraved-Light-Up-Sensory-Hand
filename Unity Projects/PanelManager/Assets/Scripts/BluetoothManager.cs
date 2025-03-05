@@ -6,9 +6,10 @@ using System.Collections;
 
 public class BluetoothManager : MonoBehaviour {
     BluetoothHelper helper;
-    readonly private string deviceName = "PanelMaster";
     public static BluetoothManager Instance { get; private set; }
     public bool connectionMade = false;
+    bool isDefaultUser = true;
+    UserData curArduinoUser = new();
 
     void Awake() {
         if (Instance != null && Instance != this)
@@ -17,30 +18,45 @@ public class BluetoothManager : MonoBehaviour {
             Instance = this;
     }
 
-    public void EstablishConnection() {
+    void Update() {
+        if (!UserManager.Instance.initialized || !helper.isConnected())
+            return;
+
+        string res = helper.Read();
+        if (res.StartsWith("DefaultUser:"))
+            isDefaultUser = res[^1] == '1';
+        else if (res.StartsWith("USER:"))
+            curArduinoUser = UserManager.Instance.users.FindUser(res[5..^1]);
+    }
+
+    public void EstablishConnection(string deviceName = "PanelMaster") {
         try {
             helper = BluetoothHelper.GetInstance(deviceName);
             helper.OnConnected += OnConnected;
             helper.OnConnectionFailed += OnConnectionFailed;
+            helper.setTerminatorBasedStream("\n");
+            helper.Connect();
         }
         catch (Exception ex) { 
             print("Failed: " + ex);
         }
     }
 
-    void OnConnected(BluetoothHelper helper) { 
+    void OnConnected(BluetoothHelper helper) {
+        SendData("Init");
         helper.StartListening();
         UserManager.Instance.Initialize();
-        connectionMade = true;
-        UserData user;
-        if (IsDefaultUser()) {
-            user = UserManager.Instance.users.allUsers[0];
+        StartCoroutine(DelayedConnected());
+    }
+
+    IEnumerator DelayedConnected() {
+        yield return new WaitForSeconds(1.0f);
+        UserData user = isDefaultUser ? UserManager.Instance.users.allUsers[0] : curArduinoUser;
+        if (isDefaultUser)
             SetUser(user);
-        }
-        else
-            user = GetUserOnArduino();
         AppManager.Instance.curUser = user;
         AppManager.Instance.curUserText.text = user.Name;
+        connectionMade = true;
     }
 
     void OnConnectionFailed(BluetoothHelper helper) { print("Connection failed"); }
@@ -54,17 +70,7 @@ public class BluetoothManager : MonoBehaviour {
         return true;
     }
 
-    public bool IsDefaultUser() {
-        SendData("IsSet");
-        string response = helper.Read();
-        return response == "NULL";
-    }
+    public void SetUser(UserData user) { SendData("USER:" + user.FormatArgsForArduino()); }
 
-    public void SetUser(UserData user) { SendData("USER" + user.FormatArgsForArduino()); }
-
-    UserData GetUserOnArduino() {
-        SendData("USER:NAME");
-        string response = helper.Read();
-        return UserManager.Instance.users.allUsers.FirstOrDefault(x => x.Name == response);
-    }
+    public void SetUserVariable(SettingTypes type, float value) { SendData("SETV:" + type.ToString() + "=" + value); }
 }

@@ -100,10 +100,10 @@
         },
         {
             "Name": "Oliver",
-            "MaxBrightness": 90.0,
+            "MaxBrightness": 100.0,
             "MinBrightness": 20.0,
             "MaxVolume": 95.0,
-            "MinVolume": 30.0
+            "MinVolume": 40.0
         },
         {
             "Name": "Sarah",

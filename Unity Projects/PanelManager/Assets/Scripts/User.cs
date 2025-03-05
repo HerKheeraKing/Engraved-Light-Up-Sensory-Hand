@@ -1,5 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
+
+public enum SettingTypes {
+    MaxBright,
+    MinBright,
+    MaxVol,
+    MinVol
+};
 
 //Base data per user
 [System.Serializable]
@@ -10,15 +18,7 @@ public struct UserData {
     public float MaxVolume;
     public float MinVolume;
 
-    public UserData() {
-        Name = "NULL";
-        MaxBrightness = 100;
-        MinBrightness = 0;
-        MaxVolume = 100;
-        MinVolume = 0;
-    }
-
-    public UserData(string Name, float MaxBrightness = 100, float MinBrightness = 0, float MaxVolume = 100, float MinVolume = 0) {
+    public UserData(string Name = "NULL", float MaxBrightness = 100, float MinBrightness = 0, float MaxVolume = 100, float MinVolume = 0) {
         this.Name = Name;
         this.MaxBrightness = MaxBrightness;
         this.MinBrightness = MinBrightness;
@@ -45,4 +45,6 @@ public class Users {
     }
 
     public void RemoveUser(UserData user) { allUsers.Remove(user); }
+
+    public UserData FindUser(string name) { return allUsers.FirstOrDefault(x => x.Name == name); }
 }

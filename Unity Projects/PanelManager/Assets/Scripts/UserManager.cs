@@ -7,6 +7,7 @@ public class UserManager : MonoBehaviour {
     string filePath;
     static UserManager _Instance;
     public Users users;
+    public bool initialized = false;
     public static UserManager Instance {
         get {
             if (_Instance == null) {
@@ -26,6 +27,7 @@ public class UserManager : MonoBehaviour {
         }
         else
             users = Load();
+        initialized = true;
     }
 
     public void AddUser(UserData user) {

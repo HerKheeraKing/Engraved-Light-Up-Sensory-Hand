@@ -1,8 +1,15 @@
 fileFormatVersion: 2
 guid: ea8c8df016d01495dbc7b8f0318bc946
+AssetOrigin:
+  serializedVersion: 1
+  productId: 98960
+  packageName: Arduino Bluetooth Plugin
+  packageVersion: 5.6.4
+  assetPath: Assets/BluetoothAPI/Plugins/ArduinoBluetoothAPI.dll
+  uploadId: 618052
 PluginImporter:
   externalObjects: {}
-  serializedVersion: 2
+  serializedVersion: 3
   iconMap: {}
   executionOrder: {}
   defineConstraints: []
@@ -11,10 +18,14 @@ PluginImporter:
   isExplicitlyReferenced: 0
   validateReferences: 1
   platformData:
-  - first:
-      : Any
-    second:
+    Android:
       enabled: 0
+      settings:
+        AndroidLibraryDependee: UnityLibrary
+        AndroidSharedLibraryType: Executable
+        CPU: ARMv7
+    Any:
+      enabled: 1
       settings:
         Exclude Android: 1
         Exclude Editor: 0
@@ -25,75 +36,29 @@ PluginImporter:
         Exclude Win: 0
         Exclude Win64: 0
         Exclude WindowsStoreApps: 1
-  - first:
-      Android: Android
-    second:
-      enabled: 0
-      settings:
-        CPU: ARMv7
-  - first:
-      Any: 
-    second:
-      enabled: 1
-      settings: {}
-  - first:
-      Editor: Editor
-    second:
+    Editor:
       enabled: 1
       settings:
         CPU: AnyCPU
         DefaultValueInitialized: true
         OS: AnyOS
-  - first:
-      Facebook: Win
-    second:
-      enabled: 0
-      settings:
-        CPU: AnyCPU
-  - first:
-      Facebook: Win64
-    second:
-      enabled: 0
-      settings:
-        CPU: AnyCPU
-  - first:
-      Standalone: Linux
-    second:
+    Linux64:
       enabled: 1
       settings:
-        CPU: x86
-  - first:
-      Standalone: Linux64
-    second:
+        CPU: None
+    OSXUniversal:
+      enabled: 1
+      settings:
+        CPU: None
+    Win:
       enabled: 1
       settings:
         CPU: AnyCPU
-  - first:
-      Standalone: LinuxUniversal
-    second:
-      enabled: 1
-      settings: {}
-  - first:
-      Standalone: OSXUniversal
-    second:
+    Win64:
       enabled: 1
       settings:
         CPU: AnyCPU
-  - first:
-      Standalone: Win
-    second:
-      enabled: 1
-      settings:
-        CPU: AnyCPU
-  - first:
-      Standalone: Win64
-    second:
-      enabled: 1
-      settings:
-        CPU: AnyCPU
-  - first:
-      Windows Store Apps: WindowsStoreApps
-    second:
+    WindowsStoreApps:
       enabled: 0
       settings:
         CPU: AnyCPU
@@ -104,10 +69,3 @@ PluginImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 98960
-  packageName: Arduino Bluetooth Plugin
-  packageVersion: 5.6.4
-  assetPath: Assets/BluetoothAPI/Plugins/ArduinoBluetoothAPI.dll
-  uploadId: 618052
