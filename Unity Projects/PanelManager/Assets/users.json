@@ -100,21 +100,21 @@
         },
         {
             "Name": "Oliver",
-            "MaxBrightness": 100.0,
-            "MinBrightness": 20.0,
+            "MaxBrightness": 30.0,
+            "MinBrightness": 25.0,
             "MaxVolume": 95.0,
             "MinVolume": 40.0
         },
         {
             "Name": "Sarah",
-            "MaxBrightness": 90.0,
+            "MaxBrightness": 100.0,
             "MinBrightness": 15.0,
             "MaxVolume": 65.0,
             "MinVolume": 20.0
         },
         {
             "Name": "Sophia",
-            "MaxBrightness": 95.0,
+            "MaxBrightness": 16.0,
             "MinBrightness": 15.0,
             "MaxVolume": 30.0,
             "MinVolume": 15.0

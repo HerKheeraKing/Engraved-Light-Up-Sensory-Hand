@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using TMPro;
 using UnityEngine.UI;
-using Unity.VisualScripting;
+using UnityEngine.Android;
 
 public class AppManager : MonoBehaviour {
     public static AppManager Instance { get; private set; }
@@ -23,6 +23,20 @@ public class AppManager : MonoBehaviour {
             Destroy(gameObject);
         else
             Instance = this;
+
+        if (Application.platform == RuntimePlatform.Android) {
+            if (!Permission.HasUserAuthorizedPermission("android.permission.ACCESS_FINE_LOCATION")
+                  || !Permission.HasUserAuthorizedPermission("android.permission.ACCESS_COARSE_LOCATION")
+                  || !Permission.HasUserAuthorizedPermission("android.permission.BLUETOOTH_SCAN")
+                  || !Permission.HasUserAuthorizedPermission("android.permission.BLUETOOTH_CONNECT")) {
+                Permission.RequestUserPermissions(new string[] {Permission.CoarseLocation,
+                                                                Permission.FineLocation,
+                                                                "android.permission.BLUETOOTH_SCAN",
+                                                                "android.permission.BLUETOOTH_CONNECT",
+                                                                "BLUETOOTH_ADVERTISE"});
+            }
+        }
+
     }
     IEnumerator WaitForConnection() {
         int dotCount = 0;
