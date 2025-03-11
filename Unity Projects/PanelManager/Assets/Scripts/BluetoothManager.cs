@@ -24,7 +24,7 @@ public class BluetoothManager : MonoBehaviour {
 
         string res = helper.Read();
         if (res.StartsWith("DefaultUser:"))
-            isDefaultUser = res[^1] == '1';
+            isDefaultUser = res[^2] == '1';
         else if (res.StartsWith("USER:"))
             curArduinoUser = UserManager.Instance.users.FindUser(res[5..^1]);
     }

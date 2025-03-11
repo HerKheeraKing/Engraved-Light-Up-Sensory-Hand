@@ -2,14 +2,14 @@
     "allUsers": [
         {
             "Name": "Anna",
-            "MaxBrightness": 78.0,
-            "MinBrightness": 12.0,
+            "MaxBrightness": 50.0,
+            "MinBrightness": 25.0,
             "MaxVolume": 45.0,
             "MinVolume": 5.0
         },
         {
             "Name": "Ava",
-            "MaxBrightness": 92.0,
+            "MaxBrightness": 90.0,
             "MinBrightness": 15.0,
             "MaxVolume": 75.0,
             "MinVolume": 25.0
@@ -30,7 +30,7 @@
         },
         {
             "Name": "Emma",
-            "MaxBrightness": 70.0,
+            "MaxBrightness": 60.0,
             "MinBrightness": 10.0,
             "MaxVolume": 65.0,
             "MinVolume": 5.0
