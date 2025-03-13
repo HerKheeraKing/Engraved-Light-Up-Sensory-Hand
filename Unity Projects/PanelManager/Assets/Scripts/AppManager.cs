@@ -11,6 +11,7 @@ public class AppManager : MonoBehaviour {
     [SerializeField] TMP_Text conText, userSettingHeader;
     [SerializeField] TMP_InputField maxBright, minBright, maxVol, minVol, newUser, arduinoName;
     [SerializeField] Transform content;
+    [SerializeField] Scrollbar vertScrollbar;
     [SerializeField] Color normalColor = Color.white;
     [SerializeField] Color highlightColor = new(0x00 / 255f, 0xFF / 255f, 0x67 / 255f);
     GameObject selectedRow;
@@ -25,17 +26,14 @@ public class AppManager : MonoBehaviour {
             Instance = this;
 
         if (Application.platform == RuntimePlatform.Android) {
-            if (!Permission.HasUserAuthorizedPermission("android.permission.ACCESS_FINE_LOCATION")
-                  || !Permission.HasUserAuthorizedPermission("android.permission.ACCESS_COARSE_LOCATION")
-                  || !Permission.HasUserAuthorizedPermission("android.permission.BLUETOOTH_SCAN")
-                  || !Permission.HasUserAuthorizedPermission("android.permission.BLUETOOTH_CONNECT")) {
-                Permission.RequestUserPermissions(new string[] {Permission.CoarseLocation,
-                                                                Permission.FineLocation,
-                                                                "android.permission.BLUETOOTH_SCAN",
-                                                                "android.permission.BLUETOOTH_CONNECT",
-                                                                "BLUETOOTH_ADVERTISE"});
+            if (!Permission.HasUserAuthorizedPermission(Permission.CoarseLocation)
+              || !Permission.HasUserAuthorizedPermission(Permission.FineLocation)
+              || !Permission.HasUserAuthorizedPermission("android.permission.BLUETOOTH_SCAN")
+              || !Permission.HasUserAuthorizedPermission("android.permission.BLUETOOTH_CONNECT")) {
+                Permission.RequestUserPermissions(new string[] { Permission.CoarseLocation, Permission.FineLocation, "android.permission.BLUETOOTH_SCAN", "android.permission.BLUETOOTH_CONNECT" });
             }
         }
+
 
     }
     IEnumerator WaitForConnection() {
@@ -55,6 +53,16 @@ public class AppManager : MonoBehaviour {
             connectionScreen.SetActive(false);
             MainScreen.SetActive(true);
         }
+    }
+
+    public void DisconnectMenuScreen() {
+        conText.text = "Lost connection\nPlease restart the app.";
+        MainScreen.SetActive(false);
+        userSetting.SetActive(false);
+        adjustingUsers.SetActive(false);
+        addUser.SetActive(false);
+        arduinoNameScreen.SetActive(false);
+        connectionScreen.SetActive(true);
     }
 
     public void ArduioNameButton() {
@@ -79,10 +87,16 @@ public class AppManager : MonoBehaviour {
         adjustingUsers.SetActive(true);
         foreach (Transform child in content)
             Destroy(child.gameObject);
+        float rowHeight = 50.0f;
+        float contentHeight = UserManager.Instance.users.allUsers.Count * rowHeight;
+        RectTransform contentRectTransform = content.GetComponent<RectTransform>();
+        contentRectTransform.sizeDelta = new Vector2(contentRectTransform.sizeDelta.x, contentHeight);
+        float scrollbarSize = Mathf.Clamp01(contentHeight / contentRectTransform.rect.height);
+        vertScrollbar.size = scrollbarSize;
         foreach (var user in UserManager.Instance.users.allUsers) {
             GameObject row = new("Row_" + user.Name) { transform = { parent = content, localScale = Vector3.one } };
             row.AddComponent<Image>().color = normalColor;
-            row.GetComponent<RectTransform>().sizeDelta = new Vector2(800, 50);
+            row.GetComponent<RectTransform>().sizeDelta = new Vector2(800, rowHeight);
             TextMeshProUGUI text = new GameObject("Text").AddComponent<TextMeshProUGUI>();
             text.transform.SetParent(row.transform, false);
             text.text = user.Name;
@@ -91,6 +105,11 @@ public class AppManager : MonoBehaviour {
             text.fontSize = 20;
             row.AddComponent<Button>().onClick.AddListener(() => SelectRow(row, user));
         }
+        Canvas.ForceUpdateCanvases();
+        vertScrollbar.value = 1;
+        ScrollRect scrollRect = content.GetComponentInParent<ScrollRect>();
+        if (scrollRect != null)
+            scrollRect.onValueChanged.AddListener((Vector2 value) => { scrollRect.verticalNormalizedPosition = Mathf.Clamp(value.y, 0f, 1f); });
     }
 
     void SelectRow(GameObject row, UserData user) {

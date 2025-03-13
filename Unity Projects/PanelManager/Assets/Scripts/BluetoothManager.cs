@@ -1,7 +1,6 @@
 using UnityEngine;
 using ArduinoBluetoothAPI;
 using System;
-using System.Linq;
 using System.Collections;
 
 public class BluetoothManager : MonoBehaviour {
@@ -10,6 +9,8 @@ public class BluetoothManager : MonoBehaviour {
     public bool connectionMade = false;
     bool isDefaultUser = true;
     UserData curArduinoUser = new();
+    float lastHeartbeat = 0.0f;
+    readonly static float HEARTBEAT_TIMEOUT = 4.0f;
 
     void Awake() {
         if (Instance != null && Instance != this)
@@ -19,14 +20,20 @@ public class BluetoothManager : MonoBehaviour {
     }
 
     void Update() {
-        if (!UserManager.Instance.initialized || !helper.isConnected())
+        if (!UserManager.Instance.initialized || helper == null)
             return;
 
-        string res = helper.Read();
-        if (res.StartsWith("DefaultUser:"))
-            isDefaultUser = res[^2] == '1';
-        else if (res.StartsWith("USER:"))
-            curArduinoUser = UserManager.Instance.users.FindUser(res[5..^1]);
+        if (helper.isConnected()) {
+            string res = helper.Read();
+            if (res.StartsWith("DefaultUser:"))
+                isDefaultUser = res[^2] == '1';
+            else if (res.StartsWith("USER:"))
+                curArduinoUser = UserManager.Instance.users.FindUser(res[5..^1]);
+            else if (res.StartsWith("Heartbeat"))
+                lastHeartbeat = Time.time;
+        }
+        if (Time.time - lastHeartbeat >= HEARTBEAT_TIMEOUT && connectionMade)
+            Disconnect();
     }
 
     public void EstablishConnection(string deviceName = "PanelMaster") {
@@ -57,6 +64,12 @@ public class BluetoothManager : MonoBehaviour {
         AppManager.Instance.curUser = user;
         AppManager.Instance.curUserText.text = user.Name;
         connectionMade = true;
+    }
+
+    void Disconnect() {
+        helper.Disconnect();
+        connectionMade = false;
+        AppManager.Instance.DisconnectMenuScreen();
     }
 
     void OnConnectionFailed(BluetoothHelper helper) { print("Connection failed"); }
