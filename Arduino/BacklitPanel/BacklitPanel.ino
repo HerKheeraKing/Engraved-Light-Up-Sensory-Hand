@@ -9,7 +9,7 @@
 #define TOTPOT 36
 
 Adafruit_NeoPixel strip(LEDCOUNT, LEDPIN, NEO_GRBW + NEO_KHZ800);
-PanelManager panelManager("Panel-1");
+PanelManager panelManager("Panel-Backlit");
 
 void setup() {
   Serial.begin(115200);
