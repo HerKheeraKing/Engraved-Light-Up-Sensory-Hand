@@ -2,7 +2,7 @@
 #include <PanelManager.h>
 
 #define LEDPIN 12
-#define LEDCOUNT 10
+#define LEDCOUNT 20
 #define REDPOT 32
 #define GRNPOT 33
 #define BLUPOT 34
@@ -23,20 +23,10 @@ void setup() {
 }
 
 void loop() {
-  int r = analogRead(REDPOT) / 16;
-  int g = analogRead(GRNPOT) / 16;
-  int b = analogRead(BLUPOT) / 16;
-  int t = analogRead(TOTPOT) / 16;
-  int minT = panelManager.minBrightness * 255 / 100;
-  int maxT = panelManager.maxBrightness * 255 / 100;
-  t = constrain(t, minT, maxT);
-  r = constrain(r * t / 255, 0, 255);
-  g = constrain(g * t / 255, 0, 255);
-  b = constrain(b * t / 255, 0, 255);
-  Serial.print("MaB: "); Serial.print(panelManager.maxBrightness); 
-  Serial.print(" | MiB: "); Serial.print(panelManager.minBrightness);
-  Serial.print(" | Temp: "); Serial.println(temperatureRead()); 
-  Serial.println("Red: " + String(r) + " | Green: " + String(g) + " | Blue: " + String(b) + " | Brightness: " + String(t));
+  int t = constrain((analogRead(TOTPOT) / 16), (panelManager.minBrightness * 255 / 100), panelManager.maxBrightness * 255 / 100);
+  int r = constrain((analogRead(REDPOT) / 16) * t / 255, 0, 255);
+  int g = constrain((analogRead(GRNPOT) / 16) * t / 255, 0, 255);
+  int b = constrain((analogRead(BLUPOT) / 16) * t / 255, 0, 255);
   SetColor(r, g, b);
   delay(100);
 }
