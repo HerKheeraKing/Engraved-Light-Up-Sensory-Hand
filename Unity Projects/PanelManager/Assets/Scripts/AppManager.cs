@@ -33,9 +33,8 @@ public class AppManager : MonoBehaviour {
                 Permission.RequestUserPermissions(new string[] { Permission.CoarseLocation, Permission.FineLocation, "android.permission.BLUETOOTH_SCAN", "android.permission.BLUETOOTH_CONNECT" });
             }
         }
-
-
     }
+
     IEnumerator WaitForConnection() {
         int dotCount = 0;
         string baseText = conText.text.Split('\n')[0];

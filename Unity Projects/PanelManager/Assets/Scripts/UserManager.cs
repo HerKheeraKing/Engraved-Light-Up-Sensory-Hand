@@ -20,7 +20,7 @@ public class UserManager : MonoBehaviour {
     }
 
     public void Initialize() {
-        filePath = Application.dataPath + "/users.json";
+        filePath = Application.persistentDataPath + "/users.json";
         if (!File.Exists(filePath)) {
             users = new();
             Save();
