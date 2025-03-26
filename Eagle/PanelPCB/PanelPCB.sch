@@ -863,20 +863,15 @@ W = angled&lt;p&gt;
 <plain>
 </plain>
 <instances>
-<instance part="M1" gate="G$1" x="2.54" y="2.54" smashed="yes">
-<attribute name="NAME" x="0" y="30.48" size="1.778" layer="94"/>
-</instance>
+<instance part="M1" gate="G$1" x="2.54" y="2.54" smashed="yes"/>
 <instance part="SV1" gate="1" x="48.26" y="22.86" smashed="yes">
 <attribute name="VALUE" x="46.99" y="10.16" size="1.778" layer="96"/>
-<attribute name="NAME" x="46.99" y="36.322" size="1.778" layer="95"/>
 </instance>
 <instance part="SV2" gate="1" x="48.26" y="-5.08" smashed="yes">
 <attribute name="VALUE" x="46.99" y="-17.78" size="1.778" layer="96"/>
-<attribute name="NAME" x="46.99" y="8.382" size="1.778" layer="95"/>
 </instance>
 <instance part="SV3" gate="1" x="48.26" y="-33.02" smashed="yes">
 <attribute name="VALUE" x="46.99" y="-45.72" size="1.778" layer="96"/>
-<attribute name="NAME" x="46.99" y="-19.558" size="1.778" layer="95"/>
 </instance>
 <instance part="H1" gate="G$1" x="17.78" y="-30.48" smashed="yes">
 <attribute name="NAME" x="19.812" y="-29.8958" size="1.778" layer="95"/>

@@ -11,10 +11,10 @@
 #define SW_PIN 17
 
 // Joystick thresholds
-#define LEFT_THRESHOLD 1000
-#define RIGHT_THRESHOLD 1000
-#define UP_THRESHOLD 1000
-#define DOWN_THRESHOLD 1000
+#define LEFT_THRESHOLD 100
+#define RIGHT_THRESHOLD 3995
+#define UP_THRESHOLD 100
+#define DOWN_THRESHOLD 3995
 
 // LED Grid configuration
 #define COMMAND_NO 0x00
@@ -73,6 +73,7 @@ void loop() {
   // If the y down joystick is moved, move player 1 dot down on the y axis
   if(y_value > DOWN_THRESHOLD) movePlayer(0, 1); //Move down
 
+  Serial.println(String(player_x) + " : " + String(player_y));
   delay(200);
 }
 
@@ -86,7 +87,7 @@ void movePlayer(int dx, int dy)
     int new_x = player_x + dx;
     int new_y = player_y + dy;
 
-    if(new_x >= 0 && new_x <= 8 && new_y >= 0 && new_y <= 8)
+    if(new_x >= 0 && new_x <= 7 && new_y >= 0 && new_y <= 7)
     {
       player_x = new_x;
       player_y = new_y;
