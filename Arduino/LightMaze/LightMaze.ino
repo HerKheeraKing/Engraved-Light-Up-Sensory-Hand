@@ -38,6 +38,16 @@ Adafruit_NeoPixel pixels(NUMPIXELS, PIN, NEO_GRBW + NEO_KHZ800);
 int x_value, y_value;
 int player_x = 0;
 int player_y = 0;  // Start at 0,0;
+int targetX, targetY;
+int targetColorIndex;
+int green = pixels.Color(0, 255, 0);
+int red = pixels.Color(255, 0, 0);
+int yellow = pixels.Color(0, 255, 255);
+int blue = pixels.Color(0, 0, 255);
+int purple = pixels.Color(255, 0, 255);
+
+int colorArray[] = { red, yellow, blue, purple };
+int targetColor = colorArray[1];
 
 int command = COMMAND_NO;
 int dot = 0;
@@ -51,7 +61,9 @@ void setup() {
   analogSetAttenuation(ADC_11db);
 
   pixels.begin();  // INITIALIZE NeoPixel strip object (REQUIRED)
+  pixels.setBrightness(128);
   pixels.clear();  // Set all pixel colors to 'off'
+  setRandomPosition();
   updateGrid();
 }
 
@@ -96,11 +108,28 @@ void updateGrid() {
   int ledIndex = getLEDIndex(player_x, player_y);
   //Serial.println(String(player_x) + " : " + String(player_y) + " : " + String(ledIndex));
 
-  Serial.print("x: "); Serial.print(player_x);
-  Serial.print(", y: "); Serial.print(player_y);
-  Serial.print(", index: "); Serial.println(getLEDIndex(player_x, player_y));
+  //Serial.print("x: "); Serial.print(player_x);
+  //Serial.print(", y: "); Serial.print(player_y);
+  //Serial.print(", index: "); Serial.println(getLEDIndex(player_x, player_y));
+
+
+  if (player_x == targetX && player_y == targetY)
+  {
+
+    //Change the color of the ledIndex to the color of the randomColorIndex's color
+    //pixels.setPixelColor(ledIndex, randomColor);  // Red for target hit
+
+    //Change the location of the randomColorIndex
+    setRandomPosition();
+
+    //Change the color of the randomColorIndex to a new randomColor
+    targetColor = colorArray[random(4)];
+    //pixels.setPixelColor(randomColorIndex, randomColor);  // Set cnew target color
+
+  }
 
   pixels.setPixelColor(ledIndex, pixels.Color(0, 255, 0));  //Green pixel
+  pixels.setPixelColor(targetColorIndex, targetColor);
   pixels.show();
 }
 
@@ -112,4 +141,14 @@ int getLEDIndex(int x, int y) {
   else {
     return y * 8 + (7 - x);  //Right to left rows
   }
+}
+
+void setRandomPosition()
+{
+  do {
+    targetX = random(8);
+    targetY = random(8);
+  } while (targetX == player_x && targetY == player_y);  // Avoid spawning on player
+
+  targetColorIndex = getLEDIndex(targetX, targetY);
 }
