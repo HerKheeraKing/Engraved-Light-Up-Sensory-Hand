@@ -27,7 +27,7 @@
 #define PIN 12  // On Trinket or Gemma, suggest changing this to 1
 
 // How many NeoPixels are attached to the Arduino?
-#define NUMPIXELS 16  // Popular NeoPixel ring size
+#define NUMPIXELS 64  // Popular NeoPixel ring size
 
 // When setting up the NeoPixel library, we tell it how many pixels,
 // and which pin to use to send signals. Note that for older NeoPixel
@@ -61,10 +61,10 @@ void loop() {
   y_value = analogRead(VRY_PIN);
 
   // If the x left joystick is moved, move player 1 dot to the left on the x axis
-  if (x_value < LEFT_THRESHOLD) movePlayer(-1, 0);  //Move left
+  if (x_value < LEFT_THRESHOLD) movePlayer(1, 0);  //Move left
 
   // If the x right joystick is moved, move player 1 dot to the right on the x axis
-  if (x_value > RIGHT_THRESHOLD) movePlayer(1, 0);  //Move right
+  if (x_value > RIGHT_THRESHOLD) movePlayer(-1, 0);  //Move right
 
   // If the y up joystick is moved, move player 1 dot up on the y axis
   if (y_value < UP_THRESHOLD) movePlayer(0, -1);  //Move up
@@ -72,7 +72,6 @@ void loop() {
   // If the y down joystick is moved, move player 1 dot down on the y axis
   if (y_value > DOWN_THRESHOLD) movePlayer(0, 1);  //Move down
 
-  Serial.println(String(player_x) + " : " + String(player_y));
   delay(200);
 }
 
@@ -95,6 +94,12 @@ void movePlayer(int dx, int dy) {
 void updateGrid() {
   pixels.clear();
   int ledIndex = getLEDIndex(player_x, player_y);
+  //Serial.println(String(player_x) + " : " + String(player_y) + " : " + String(ledIndex));
+
+  Serial.print("x: "); Serial.print(player_x);
+  Serial.print(", y: "); Serial.print(player_y);
+  Serial.print(", index: "); Serial.println(getLEDIndex(player_x, player_y));
+
   pixels.setPixelColor(ledIndex, pixels.Color(0, 255, 0));  //Green pixel
   pixels.show();
 }
