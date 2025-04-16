@@ -5,25 +5,28 @@
 #define LED_ARR   14
 #define NUMPIXELS 54
 Adafruit_NeoPixel pixels(NUMPIXELS, LED_ARR, NEO_GRBW + NEO_KHZ800);
-#define LED_COLOR A1
+#define LED_COLOR 32
 
+#define XN A0
+#define YN A1
+#define YP A2
+#define XP A3
 
-#define SCREEN A5
-#define RED_POT A4
+#define RED_POT 12
 uint8_t prev_red = 0;
-#define GREEN_POT A3
+#define GREEN_POT 27
 uint8_t prev_green = 0;
-#define BLUE_POT A2
+#define BLUE_POT 33
 uint8_t prev_blue = 0;
 
-#define RESET 12
+#define RESET 15
 #define DEBOUNCE 1
 int lastState = LOW;
 int lastHeldState = LOW;
 int currState;
 unsigned long lastDebounceTime = 0;
 
-bool test = true;
+uint8_t test = 2;
 
 void setup() {
   Serial.begin(115200);
@@ -33,7 +36,7 @@ void setup() {
 
 void loop() {
 
-  if(test)
+  if(test == 1)
   {
     uint8_t r = 30;
     uint8_t g = 30;
@@ -43,7 +46,29 @@ void loop() {
       pixels.setPixelColor(i, r, g, b);
       pixels.show();
     }
+
     delay(100);
+    return;
+  }
+  else if (test == 2)
+  {
+    uint16_t xN = analogRead(XN);
+    uint16_t xP = analogRead(XP);
+    uint16_t yN = analogRead(YN);
+    uint16_t yP = analogRead(YP);
+
+    Serial.print("-XY = (");
+    Serial.print(xN);
+    Serial.print(",");
+    Serial.print(yN);
+    Serial.println(")");
+    Serial.print("+XY = (");
+    Serial.print(xP);
+    Serial.print(",");
+    Serial.print(yP);
+    Serial.println(")");
+
+    delay(250);
     return;
   }
 
