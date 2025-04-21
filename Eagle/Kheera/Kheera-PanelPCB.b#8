@@ -185,6 +185,8 @@
 <wire x1="41.58" y1="0" x2="42.85" y2="80" width="0" layer="20"/>
 <wire x1="42.85" y1="80" x2="0" y2="80" width="0" layer="20"/>
 <wire x1="0" y1="80" x2="0" y2="0" width="0" layer="20"/>
+<dimension x1="0" y1="80" x2="42.85" y2="80" x3="21.425" y3="95.25" textsize="1.778" layer="1"/>
+<dimension x1="41.58" y1="0" x2="42.85" y2="80" x3="-12.676165625" y3="40.871396875" textsize="1.778" layer="1"/>
 </plain>
 <libraries>
 <library name="StewartPlatform">
