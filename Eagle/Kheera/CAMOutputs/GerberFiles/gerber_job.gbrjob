@@ -1,0 +1,24 @@
+{
+    "Header": {
+        "Comment": "All values are metric (mm)",
+        "CreationDate": "2025-04-16T15:27:26Z",
+        "GenerationSoftware": {
+            "Application": "EAGLE",
+            "Vendor": "Autodesk",
+            "Version": "9.6.0"
+        },
+        "Part": "Single"
+    },
+    "Overall": {
+        "BoardThickness": 1.57,
+        "LayerNumber": 2,
+        "Name": {
+            "ProjectId": "Kheera-PanelPCB"
+        },
+        "Owner": "kheera king <contactkheera@gmail.com>",
+        "Size": {
+            "X": 42.85,
+            "Y": 80
+        }
+    }
+}
