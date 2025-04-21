@@ -2,15 +2,16 @@
 #include <PanelManager.h>
 #include <Adafruit_NeoPixel.h>
 
+
 #define LED_ARR   14
 #define NUMPIXELS 54
 Adafruit_NeoPixel pixels(NUMPIXELS, LED_ARR, NEO_GRBW + NEO_KHZ800);
 #define LED_COLOR 32
 
-#define XN A0
-#define YN A1
-#define YP A2
-#define XP A3
+#define TX_TS 16
+#define RX_TS 17
+#define TSBAUD 9600
+HardwareSerial touchScreen(2);
 
 #define RED_POT 12
 uint8_t prev_red = 0;
@@ -26,110 +27,17 @@ int lastHeldState = LOW;
 int currState;
 unsigned long lastDebounceTime = 0;
 
-uint8_t test = 2;
 
 void setup() {
   Serial.begin(115200);
+  touchScreen.begin(TSBAUD, SERIAL_8N1, TX_TS, RX_TS);
   pixels.begin();
   pinMode(RESET, INPUT_PULLDOWN);
 }
 
 void loop() {
-
-  if(test == 1)
-  {
-    uint8_t r = 30;
-    uint8_t g = 30;
-    uint8_t b = 30;
-
-    for(int i=0; i<NUMPIXELS + 1; i++) {
-      pixels.setPixelColor(i, r, g, b);
-      pixels.show();
-    }
-
-    delay(100);
-    return;
-  }
-  else if (test == 2)
-  {
-    uint16_t xN = analogRead(XN);
-    uint16_t xP = analogRead(XP);
-    uint16_t yN = analogRead(YN);
-    uint16_t yP = analogRead(YP);
-
-    Serial.print("-XY = (");
-    Serial.print(xN);
-    Serial.print(",");
-    Serial.print(yN);
-    Serial.println(")");
-    Serial.print("+XY = (");
-    Serial.print(xP);
-    Serial.print(",");
-    Serial.print(yP);
-    Serial.println(")");
-
-    delay(250);
-    return;
-  }
-
-  //Code for creating the color to be painted onto the matrix
-  uint8_t red = analogRead(RED_POT) / 16;
-  Serial.print("RED VAL:");
-  Serial.println(red);
-  uint8_t green = analogRead(GREEN_POT) / 16;
-  Serial.print("GREEN VAL:");
-  Serial.println(green);
-  uint8_t blue = analogRead(BLUE_POT) / 16;
-  Serial.print("BLUE VAL:");
-  Serial.println(blue);
-  Serial.println();
-
-
-
-  //Implement code for finding which section of the screen is pressed
-
-
-
-  //float ratio = analogRead(SOFT_POT)/ 4095.0f;
-  //int light = (ratio * NUMPIXELS) - 1;
-  //Serial.println(analogRead(SOFT_POT));
-  //Serial.println(light);
-
-
-  //Implement code for drawing to the pixel associated with that portion of screen
-  
-
-
-
-
-
-  if(lastHeldState == HIGH){
-    pixels.clear();
-    pixels.show();
-    Serial.println("LEDs reset");
-  }
-  else{
-    if(prev_red - red > 5) red = prev_red;
-    if(prev_green - green > 5) green = prev_green;
-    if(prev_blue - blue > 5) blue = prev_blue;
-      for(int i=0; i<NUMPIXELS + 1; i++) {
-      pixels.setPixelColor(i, red, green, blue);
-      pixels.show();
-    }
-  }
-  //for(int i=0; i<NUMPIXELS + 1; i++) {
-    //if(i == light)
-      //pixels.setPixelColor(i, pixels.Color(red, green, blue));
-    //else
-      //pixels.setPixelColor(i, pixels.Color(0, 0, 0));
-    //pixels.show();
-  //}
-
-
-  //Code for resetting all pins when the button is pressed
+  //Code for resetting all leds when the button is pressed
   currState = digitalRead(RESET);
-  Serial.println(currState);
-  Serial.println();
   if (currState != lastState) {
     lastDebounceTime = millis();
     lastState = currState;
@@ -137,8 +45,62 @@ void loop() {
   if ((millis() - lastDebounceTime) > DEBOUNCE) {
     lastHeldState = currState;
   }
-  
-  
+  if(lastHeldState == HIGH){
+    pixels.clear();
+    pixels.show();
+    return;
+  }
 
-  delay(10);
+  //Code for finding which section of the screen is pressed
+  uint8_t bufferSize = 5;
+  static byte buffer[5];
+  static uint8_t index = 0;
+  uint16_t x_coord;
+  uint16_t y_coord;
+  //while available keep reading in until we find the start byte
+  while (touchScreen.available() && !x_coord && !y_coord) {
+    byte b = touchScreen.read();
+    if (index == 0 && b != 0x81) continue;
+    //then we read in bytes until our buffer is full
+    buffer[index++] = b;
+
+    if (index == bufferSize) {
+      //Parse X/Y coordinates
+      x_coord = buffer[1] | (buffer[2] << 7);
+      y_coord = buffer[3] | (buffer[4] << 7);
+      index = 0;
+    }
+  }
+
+  if(!x_coord || !y_coord) return;
+
+  //Code for creating the color to be painted onto the matrix
+  uint8_t red = analogRead(RED_POT) / 16;
+  uint8_t green = analogRead(GREEN_POT) / 16;
+  uint8_t blue = analogRead(BLUE_POT) / 16;
+  if(prev_red - red < 5) red = prev_red;
+  if(prev_green - green < 5) green = prev_green;
+  if(prev_blue - blue < 5) blue = prev_blue;
+
+
+  //Implement code for drawing to the pixel associated with that portion of screen
+  
+  //x and y are flipped both on their axis and direction
+  uint16_t adjusted_X = 8 - ((y_coord - 200) / 425);
+  uint16_t adjusted_Y = 5 - ((x_coord - 500) / 575);
+  if(adjusted_X > 8) return;
+  if(adjusted_Y > 5) return;
+  
+  //Serial.print("(X,Y) - (");
+  //Serial.print(adjusted_X);
+  //Serial.print(",");
+  //Serial.print(adjusted_Y);
+  //Serial.println(")");
+
+  if(adjusted_Y % 2) adjusted_X = (8 - adjusted_X);
+  uint16_t led_i = adjusted_X + (adjusted_Y * 9);
+  pixels.setPixelColor(led_i, red, green, blue);
+  pixels.show();
+
+  delay(1);
 }
