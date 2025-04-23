@@ -69,15 +69,21 @@ void loop() {
   // >>>>>>>>>>>>LIGHT UP EACH LED<<<<<<<<<<<<<<<
   // The first NeoPixel in a strand is #0, second is 1, all the way up
   // to the count of pixels minus one.
-  for(int i=0; i<NUMPIXELS; i++) { // For each pixel...
+  for(int i = 6; i < 12; i++) { // For each pixel... 
 
     // it if *is* touched and *wasnt* touched before, alert!
     if ((currtouched & _BV(i)) && !(lasttouched & _BV(i)) ) {
       Serial.print(i); Serial.println(" touched");
+   
+    // Lerping color 
+
 
     // pixels.Color() takes RGB values, from 0,0,0 up to 255,255,255
-    // Here we're using a moderately bright green color:
-    pixels.setPixelColor(i, pixels.Color(128, 0, 128));
+    pixels.setPixelColor(i - 6, pixels.Color(255, 255, 255));
+      if(i == 11)
+      {
+        pixels.setPixelColor(i - 5, pixels.Color(255, 255, 255));
+      }
     }
 
 
@@ -86,7 +92,11 @@ void loop() {
       Serial.print(i); Serial.println(" released");
 
     // Here we're using a moderately bright green color:
-    pixels.setPixelColor(i, pixels.Color(0, 0, 0));
+    pixels.setPixelColor(i - 6, pixels.Color(0, 0, 0));
+    if(i == 11)
+      {
+        pixels.setPixelColor(i - 5, pixels.Color(0, 0, 0));
+      }
     }
   }
 
