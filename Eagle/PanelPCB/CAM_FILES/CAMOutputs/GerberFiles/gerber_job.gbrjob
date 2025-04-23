@@ -1,7 +1,7 @@
 {
     "Header": {
         "Comment": "All values are metric (mm)",
-        "CreationDate": "2025-03-19T21:22:51Z",
+        "CreationDate": "2025-04-02T15:32:44Z",
         "GenerationSoftware": {
             "Application": "EAGLE",
             "Vendor": "Autodesk",
@@ -15,7 +15,7 @@
         "Name": {
             "ProjectId": "PanelPCB"
         },
-        "Owner": "Joshua Furber <jfurber404@gmail.com>",
+        "Owner": "John Czaban <jczaban01@fullsail.edu>",
         "Size": {
             "X": 42.85,
             "Y": 81.27
