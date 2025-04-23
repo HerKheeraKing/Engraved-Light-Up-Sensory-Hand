@@ -91,15 +91,16 @@ void loop() {
   if(adjusted_X > 8) return;
   if(adjusted_Y > 5) return;
   
-  //Serial.print("(X,Y) - (");
-  //Serial.print(adjusted_X);
-  //Serial.print(",");
-  //Serial.print(adjusted_Y);
-  //Serial.println(")");
+  Serial.print("(X,Y) - (");
+  Serial.print(adjusted_X);
+  Serial.print(",");
+  Serial.print(adjusted_Y);
+  Serial.println(")");
 
   if(adjusted_Y % 2) adjusted_X = (8 - adjusted_X);
   uint16_t led_i = adjusted_X + (adjusted_Y * 9);
-  pixels.setPixelColor(led_i, red, green, blue);
+  pixels.setPixelColor(led_i, 50, 50, 50);
+  //pixels.setPixelColor(led_i, red, green, blue);
   pixels.show();
 
   delay(1);
