@@ -3,24 +3,26 @@
 #include <Adafruit_NeoPixel.h>
 
 
-#define LED_ARR   14
+#define LED_ARR   33
 #define NUMPIXELS 54
 Adafruit_NeoPixel pixels(NUMPIXELS, LED_ARR, NEO_GRBW + NEO_KHZ800);
+uint16_t last_x = 0;
+uint16_t last_y = 0;
 #define LED_COLOR 32
 
-#define TX_TS 16
-#define RX_TS 17
+#define TX_TS 17
+#define RX_TS 16
 #define TSBAUD 9600
 HardwareSerial touchScreen(2);
 
-#define RED_POT 12
+#define RED_POT 15
 uint8_t prev_red = 0;
 #define GREEN_POT 27
 uint8_t prev_green = 0;
-#define BLUE_POT 33
+#define BLUE_POT 12
 uint8_t prev_blue = 0;
 
-#define RESET 15
+#define RESET 14
 #define DEBOUNCE 1
 int lastState = LOW;
 int lastHeldState = LOW;
@@ -33,6 +35,7 @@ void setup() {
   touchScreen.begin(TSBAUD, SERIAL_8N1, TX_TS, RX_TS);
   pixels.begin();
   pinMode(RESET, INPUT_PULLDOWN);
+  Serial.println("SUCCESFUL STARTUP");
 }
 
 void loop() {
@@ -48,6 +51,7 @@ void loop() {
   if(lastHeldState == HIGH){
     pixels.clear();
     pixels.show();
+    Serial.println("LEDS RESET");
     return;
   }
 
@@ -73,34 +77,51 @@ void loop() {
   }
 
   if(!x_coord || !y_coord) return;
+  //else Serial.println("SUCCESSFUL PACKET READ");
 
   //Code for creating the color to be painted onto the matrix
   uint8_t red = analogRead(RED_POT) / 16;
   uint8_t green = analogRead(GREEN_POT) / 16;
   uint8_t blue = analogRead(BLUE_POT) / 16;
-  if(prev_red - red < 5) red = prev_red;
-  if(prev_green - green < 5) green = prev_green;
-  if(prev_blue - blue < 5) blue = prev_blue;
-
+  uint8_t check = 0;
+  if(red - prev_red < 5) {
+    red = prev_red;
+    check++;
+  }
+  if(green - prev_green < 5) {
+    green = prev_green;
+    check++;
+  }
+  if(blue - prev_blue < 5) {
+    blue = prev_blue;
+    check++;
+  }
+  
+  //Serial.println("SUCCESSFUL COLOR CREATION");
 
   //Implement code for drawing to the pixel associated with that portion of screen
-  
-  //x and y are flipped both on their axis and direction
-  uint16_t adjusted_X = 8 - ((y_coord - 200) / 425);
-  uint16_t adjusted_Y = 5 - ((x_coord - 500) / 575);
+  uint16_t adjusted_X = ((x_coord - 200) / 425);
+  uint16_t adjusted_Y = ((y_coord - 500) / 575);
   if(adjusted_X > 8) return;
   if(adjusted_Y > 5) return;
   
-  Serial.print("(X,Y) - (");
-  Serial.print(adjusted_X);
-  Serial.print(",");
-  Serial.print(adjusted_Y);
-  Serial.println(")");
+  //Serial.print("(X,Y) - (");
+  //Serial.print(adjusted_X);
+  //Serial.print(",");
+  //Serial.print(adjusted_Y);
+  //Serial.println(")");
 
   if(adjusted_Y % 2) adjusted_X = (8 - adjusted_X);
+
+  if(check == 3 && last_x == adjusted_X && last_y == adjusted_Y) return;
+  else {
+    last_x = adjusted_X;
+    last_y = adjusted_Y;
+  }
+
   uint16_t led_i = adjusted_X + (adjusted_Y * 9);
-  pixels.setPixelColor(led_i, 50, 50, 50);
-  //pixels.setPixelColor(led_i, red, green, blue);
+  //pixels.setPixelColor(led_i, 50, 50, 50);
+  pixels.setPixelColor(led_i, red, green, blue);
   pixels.show();
 
   delay(1);
