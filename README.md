@@ -30,7 +30,7 @@ Tools: SolidWorks, Arduino (C/C++), ESP32, 3D Printing, CNC, Soldering
 
 ##### 🎮 POV: Mia-mi in Action -> Click To Watch!
 <p align="left">
-  <a href="https://youtu.be/SF3ZUqv63FA?new=1">
+  <a href="https://youtu.be/lcOjuRKSOz0">
     <img src="Solidworks/My Things/Mia-mi Images/final 6.jpg" width="400" />
   </a>
 </p>
@@ -39,7 +39,7 @@ Tools: SolidWorks, Arduino (C/C++), ESP32, 3D Printing, CNC, Soldering
 
 ##### 🎥 Mia-mi lights on Demo -> Click To Watch!
 <p align="left">
-  <a href="https://youtu.be/Fm8Vq0VstzQ?new=1">
+  <a href="https://youtu.be/a2H5e4Sap0w">
     <img src="Solidworks/My Things/Mia-mi Images/Final 4 v2.jpg" width="400" height="500" />
   </a>
 </p>
